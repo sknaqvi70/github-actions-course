@@ -1,0 +1,28 @@
+name: Demonstrate GitHub Token
+
+on:
+  workflow_dispatch:
+
+# Give the GITHUB_TOKEN permission to write issues
+permissions:
+  issues: write
+
+jobs:
+  token-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create issue comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Token Demo Issue',
+              body: 'This issue was created using GITHUB_TOKEN.'
+            });
+
+            console.log(`Created issue #${issue.data.number}`);
+```
